@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <title>Simple online base64 encode/decode</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css" />
+</head>
+
+<body>
+    <div id="app" class="container">
+        <br/>
+        <h1 class="title">Simple online base64 encode/decode</h1>
+        <br/>
+        <h2 class="subtitle">Plain text</h2>
+        <textarea id="text" class="textarea" v-model="text" v-on:keyup="encode"></textarea>
+        <br/>
+        <h2 class="subtitle">Base64 encoded</h2>
+        <textarea class="textarea" v-model="base64" v-on:keyup="decode"></textarea>
+        <br/>
+        <p class="notification has-text-grey">
+            Type your text and get base64 encoded, or type your base64 and get the plain text. <b>It's two way binded!</b>
+        </p>
+        <p class="center">powered by <a target="blank" href="https://www.enbiso.com">enbiso</a></p>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                text: '',
+                base64: ''
+            },
+            methods: {
+                encode: function(event) {
+                    this.$data.base64 = btoa(this.$data.text);
+                },
+                decode: function(event) {
+                    this.$data.text = atob(this.$data.base64);
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

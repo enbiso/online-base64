@@ -2,8 +2,14 @@
 
 <head>
     <title>Simple online base64 encode/decode</title>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>    
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .column {
+            padding-bottom: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -11,18 +17,43 @@
         <br/>
         <h1 class="title">Simple online base64 encode/decode</h1>
         <br/>
-        <h2 class="subtitle">Plain text</h2>
-        <textarea id="text" class="textarea" v-model="text" v-on:keyup="encode"></textarea>
+        <div class="columns">
+            <h2 class="column is-half subtitle">Plain text</h2>
+            <div class="column has-text-right">
+                <span class="select">
+                    <select v-model="passwordLength">
+                        <option value="8">Length 8</option>
+                        <option value="12">Length 12</option>
+                        <option value="16">Length 16</option>
+                        <option value="20">Length 20</option>
+                        <option value="24">Length 24</option>
+                    </select>
+                </span>
+                <button class="button" v-on:click="genPassword">Generate Password</button>
+                &nbsp;
+                &nbsp;
+                <button class="button clip-btn" data-clipboard-target="#text">Copy to Clipboard</button>
+            </div>
+        </div>
+        <textarea id="text" class="textarea" v-model="text" v-on:keyup="encode" v-on:change="encode"></textarea>
         <br/>
-        <h2 class="subtitle">Base64 encoded</h2>
-        <textarea class="textarea" v-model="base64" v-on:keyup="decode"></textarea>
+        <br/>
+        <div class="columns">
+            <h2 class="column is-half subtitle">Base64 encoded</h2>
+            <div class="column has-text-right">
+                <button class="button clip-btn" data-clipboard-target="#base64">Copy to Clipboard</button>
+            </div>
+        </div>
+        <textarea id="base64" class="textarea" v-model="base64" v-on:keyup="decode"></textarea>
         <br/>
         <p class="notification has-text-grey">
-            Type your text and get base64 encoded, or type your base64 and get the plain text. <b>It's two way binded!</b>
+            Type your text and get base64 encoded, or type your base64 and get the plain text.
+            <b>It's two way binded!</b>
         </p>
         <hr/>
         <p class="has-text-centered">
-            With &hearts; by <a target="blank" href="https://www.enbiso.com">enbiso</a> | 
+            With &hearts; by
+            <a target="blank" href="https://www.enbiso.com">enbiso</a> |
             <a target="blank" href="https://github.com/enbiso/online-base64">Fork in Github</a>
         </p>
     </div>
@@ -32,17 +63,28 @@
             el: '#app',
             data: {
                 text: '',
-                base64: ''
+                base64: '',
+                passwordLength: 16
             },
             methods: {
-                encode: function(event) {
+                encode: function (event) {
                     this.$data.base64 = btoa(this.$data.text);
                 },
-                decode: function(event) {
+                decode: function (event) {
                     this.$data.text = atob(this.$data.base64);
+                },
+                genPassword: function (event) {
+                    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    let text = "";                    
+                    for (let i = 0; i < this.$data.passwordLength; i++) {
+                        text += possible.charAt(Math.floor(Math.random() * possible.length));
+                    }
+                    this.$data.text = text;
+                    this.encode(event);
                 }
             }
-        })
+        });
+        new ClipboardJS('.clip-btn');
     </script>
 
 </body>

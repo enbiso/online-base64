@@ -59,12 +59,14 @@
     </div>
 
     <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                text: '',
-                base64: '',
-                passwordLength: 16
+        import { createApp } from 'vue'
+        var app = createApp({
+            data() {
+                return {
+                    text: '',
+                    base64: '',
+                    passwordLength: 16
+                }
             },
             methods: {
                 encode: function (event) {
@@ -83,7 +85,7 @@
                     this.encode(event);
                 }
             }
-        });
+        }).mount('#app');
         new ClipboardJS('.clip-btn');
     </script>
 
